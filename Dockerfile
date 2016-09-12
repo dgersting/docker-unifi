@@ -4,7 +4,7 @@ MAINTAINER David Gersting
 LABEL unifi-version="5.0.7"
 
 VOLUME ["/data/mongodb", "/data/unifi"]
-EXPOSE 8080 8443 8880 8843
+EXPOSE 8443 8080 8880 8843
 
 # Add MongoDB & Ubiquiti repos
 ADD configs/repos.list /etc/apt/sources.list.d/repos.list
@@ -34,5 +34,5 @@ ADD configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Add Unifi config file & setup unifi data directory
 ADD configs/unifi.conf /data/unifi/system.properties
 
-# Start supervisord as PID1
+# Start supervisord
 CMD ["/usr/bin/supervisord"]
