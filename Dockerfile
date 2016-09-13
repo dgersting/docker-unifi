@@ -18,10 +18,7 @@ RUN \
     apt-key adv --keyserver keyserver.ubuntu.com --recv EA312927 2>&1 && \
     apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 2>&1 && \
     apt-get update -yq && apt-get install -yq net-tools unifi && \
-#    useradd -r unifi && \
-#    chown -R unifi:unifi /usr/lib/unifi && \
     rm -rf /var/lib/apt/lists/*
 
 # Change to non-privileged user and launch unifi
-#USER unifi
 CMD ["java", "-Xmx256M", "-jar", "/usr/lib/unifi/lib/ace.jar", "start"]
