@@ -8,10 +8,10 @@ WORKDIR /usr/lib/unifi
 EXPOSE 8443 8080 8880 8843
 
 # Add Unifi config file
-COPY configs/unifi.conf /usr/lib/unifi/data/system.properties
+COPY unifi.conf /usr/lib/unifi/data/system.properties
 
 # Add MongoDB(EA312927) & Ubiquiti(C0A52C50) repos
-COPY configs/repos.list /etc/apt/sources.list.d/repos.list
+COPY repos.list /etc/apt/sources.list.d/repos.list
 
 # Setup container
 RUN \
