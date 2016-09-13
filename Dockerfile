@@ -1,38 +1,24 @@
-FROM debian
+FROM debian:jessie
 MAINTAINER David Gersting
 
 LABEL unifi-version="5.0.7"
 
-VOLUME ["/data/mongodb", "/data/unifi"]
+VOLUME /usr/lib/unifi/data
+WORKDIR /usr/lib/unifi
 EXPOSE 8443 8080 8880 8843
 
-# Add MongoDB & Ubiquiti repos
-ADD configs/repos.list /etc/apt/sources.list.d/repos.list
+# Add Unifi config file
+COPY unifi.conf /usr/lib/unifi/data/system.properties
 
-# Install software
+# Add MongoDB(EA312927) & Ubiquiti(C0A52C50) repos
+COPY repos.list /etc/apt/sources.list.d/repos.list
+
+# Setup container
 RUN \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv EA312927 2>1 && \
-  apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 2>1 && \
-  apt-get update -y && \
-  apt-get upgrade -y && \
-  apt-get install -y uuid unifi supervisor && \
-  apt-get autoremove -y && \
-  apt-get clean
+    apt-key adv --keyserver keyserver.ubuntu.com --recv EA312927 2>&1 && \
+    apt-key adv --keyserver keyserver.ubuntu.com --recv C0A52C50 2>&1 && \
+    apt-get update -yq && apt-get install -yq net-tools unifi && \
+    rm -rf /var/lib/apt/lists/*
 
-# Setup data directories
-RUN \
-  mkdir -p /data/mongodb /data/unifi /usr/lib/unifi/data && \
-  rmdir /usr/lib/unifi/data && \
-  ln -s /data/unifi /usr/lib/unifi/data
-
-# Add MongoDB config file
-ADD configs/mongodb.conf /etc/mongodb.conf
-
-# Add Supervisor config file
-ADD configs/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Add Unifi config file & setup unifi data directory
-ADD configs/unifi.conf /data/unifi/system.properties
-
-# Start supervisord
-CMD ["/usr/bin/supervisord"]
+# Change to non-privileged user and launch unifi
+CMD ["java", "-Xmx256M", "-jar", "/usr/lib/unifi/lib/ace.jar", "start"]
