@@ -3,7 +3,7 @@ MAINTAINER David Gersting
 
 LABEL unifi-version="5.0.7"
 
-VOLUME /usr/lib/unifi/data
+VOLUME ["/usr/lib/unifi/data", "/usr/lib/unifi/logs"]
 WORKDIR /usr/lib/unifi
 EXPOSE 8443 8080 8880 8843
 
