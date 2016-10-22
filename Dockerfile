@@ -13,6 +13,9 @@ COPY unifi.conf /usr/lib/unifi/data/system.properties
 # Add MongoDB(EA312927) & Ubiquiti(C0A52C50) repos
 COPY repos.list /etc/apt/sources.list.d/repos.list
 
+# Add udev tuning rules
+COPY udev-tuning.rules /etc/udev/rules.d/90-tuning.rules
+
 # Setup container
 RUN \
     apt-key adv --keyserver keyserver.ubuntu.com --recv EA312927 2>&1 && \

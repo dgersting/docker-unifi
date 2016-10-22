@@ -1,0 +1,2 @@
+# MongoDB doesn't like a large read-ahead
+ACTION=="add", KERNEL=="sda", ATTR{bdi/read_ahead_kb}="256"
